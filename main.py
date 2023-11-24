@@ -1,6 +1,7 @@
 import RPi.GPIO as g
 import time
 import Adafruit_DHT as dht
+import spidev
 
 buttonPin = 26
 TRIGER = 24
@@ -20,12 +21,29 @@ g.setup(ECHO,g.IN) # 초음파 ECHO
 g.setup(TRIGER,g.OUT) # 초음파 TRIGER
 g.setup(buzzer, g.OUT) # 부저 등록
 
+# 부저 코드
 pwm = g.PWM(buzzer, 100)
 pwm.start(50)
 
+# 조도 센서 코드
+spi = spidev.SpiDev()
+spi.open(0, 0)
+spi.max_speed_hz = 1000000
+
 warnLevel = 1 # 1: 괜찮음 (혹은 정보 수집 전), 2: 주의, 3: 위험
 
+# 조도 센서 관련 함수
+def ReadVol(vol):
+    adc = spi.xfer2([1, (0x08+vol) << 4, 0])
+    data = ((adc[1]&0x03) << 8) + adc[2]
+    return data
+
+
+
 while True:
+    brightness = ReadVol(0) # 밝기 정의
+    # 코드 쓸 때 brightness < 100 이런 식으로 작성
+
     if warnLevel == 1:
         print('1')
     elif warnLevel == 2:

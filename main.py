@@ -155,7 +155,7 @@ cv2.destroyAllWindows()
 
 while True:
     brightness = ReadVol(0) # 밝기 정의
-    # 코드 쓸 때 brightness < 100 이런 식으로 작성
+    # 코드 쓸 때 brightness < 100 이런 식으로 작성 if문 사용
 
     if warnLevel == 1:
         print('1')
@@ -175,7 +175,9 @@ while True:
     try:
         while True:
             humidity, temperature = dht.read_retry(dht.DHT22,17) # 17번 핀으로 습도, 온도 감지, humidity = 습도, temperature = 온도
-            
+    
+    # if 문으로 온습도에 따라서 단게 변경
+
     except KeyboardInterrupt:
         g.cleanup()
 
@@ -193,6 +195,8 @@ while True:
     period = endTime - startTime
     dist1 = round(period * 1000000/58,2)
     dist2 = round(period * 17241,2)
+
+    # 거리에 따라 단계 변경
     if dist1 <= 10 and dist2 <= 10:
         print("detect")
     else:

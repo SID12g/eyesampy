@@ -5,7 +5,7 @@ import Adafruit_DHT as dht
 buttonPin = 26
 TRIGER = 24
 ECHO = 23
-
+buzzer = 13
 
 g.setwarnings(False)
 
@@ -18,6 +18,10 @@ g.setup(12, g.OUT) # 위험 단계를 초기화 시키는 버튼 출력
 g.setup(17, g.OUT) # 온도와 습도를 감지
 g.setup(ECHO,g.IN) # 초음파 ECHO
 g.setup(TRIGER,g.OUT) # 초음파 TRIGER
+g.setup(buzzer, g.OUT) # 부저 등록
+
+pwm = g.PWM(buzzer, 100)
+pwm.start(50)
 
 warnLevel = 1 # 1: 괜찮음 (혹은 정보 수집 전), 2: 주의, 3: 위험
 
@@ -28,6 +32,12 @@ while True:
         print('2')
     elif warnLevel == 3:
         print('3')
+
+        # 위험 상태 도달 시 부저로 알림
+        pwm.ChangeDutyCycle(50)
+        pwm.ChangeFrequency(261) 
+        time.sleep(1.0)
+
     if g.input(buttonPin) == g.HIGH:
         warnLevel = 1
         print("정상화")

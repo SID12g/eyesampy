@@ -2,8 +2,9 @@ import RPi.GPIO as g
 import time
 import Adafruit_DHT as dht
 
+g.setmode(g.BCM)
+g.setup(17, g.OUT)
 
-ideal_h,ideal_t = map(int,input().split())
 
 try:
     while True:

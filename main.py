@@ -25,6 +25,8 @@ g.setup(ECHO,g.IN) # 초음파 ECHO
 g.setup(TRIGER,g.OUT) # 초음파 TRIGER
 g.setup(buzzer, g.OUT) # 부저 등록
 
+startTime = time.time()
+
 # 부저 코드
 pwm = g.PWM(buzzer, 100)
 pwm.start(50)
@@ -41,9 +43,6 @@ def ReadVol(vol):
     adc = spi.xfer2([1, (0x08+vol) << 4, 0])
     data = ((adc[1]&0x03) << 8) + adc[2]
     return data
-
-
-
 
 # 카메라 관련 함수
 
@@ -174,7 +173,7 @@ while True:
         print("정상화")
     try:
         while True:
-            humidity, temperature = dht.read_retry(dht.DHT22,17) # 17번 핀으로 습도, 온도 감지, humidity = 습도, temperature = 온도
+            humidity, temperature = dht.read_retry(dht.DHT11,17) # 17번 핀으로 습도, 온도 감지, humidity = 습도, temperature = 온도
     
     # if 문으로 온습도에 따라서 단게 변경
 

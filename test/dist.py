@@ -9,6 +9,8 @@ g.setmode(g.BCM)
 g.setup(ECHO,g.IN)
 g.setup(TRIGER,g.OUT)
 
+startTime = time.time()
+
 while True:
     g.output(TRIGER,g.LOW)
     time.sleep(0.1)

@@ -22,6 +22,7 @@ g.setup(TRIGER,g.OUT) # 초음파 TRIGER 거리 : dist1
 g.setup(buzzer, g.OUT) # 부저 등록
 
 startTime = time.time()
+endTime = time.time()
 
 # 부저 코드
 pwm = g.PWM(buzzer, 100)
@@ -69,8 +70,12 @@ while True:
     g.output(TRIGER,g.LOW)
     while g.input(ECHO) == g.LOW:
         startTime = time.time()
+        if g.input(ECHO) == g.HIGH:
+            break
     while g.input(ECHO) == g.HIGH:
         endTime = time.time()
+        if g.input(ECHO) == g.LOW:
+            break
         
     period = endTime - startTime
     dist1 = round(period * 1000000/58,2)

@@ -120,7 +120,7 @@ while True:
 
     if 700>brightness:
         warnLevel = 2
-    if 100>brightness:
+    if 300>brightness:
         warnLevel = 3
     if 20>dist1:
         warnLevel = 2

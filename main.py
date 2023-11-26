@@ -116,14 +116,14 @@ while True:
     except KeyboardInterrupt:
         g.cleanup()
 
-    
+    brightness = ReadVol(0)
 
     if 700>brightness:
         warnLevel = 2
-    if 300>brightness:
-        warnLevel = 3
     if 20>dist1:
         warnLevel = 2
+    if 300>brightness:
+        warnLevel = 3
     if 10>dist1:
         warnLevel = 3
     

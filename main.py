@@ -79,9 +79,6 @@ while True:
         pwm.ChangeDutyCycle(50)
         pwm.ChangeFrequency(261) 
         time.sleep(1.0)
-    if g.input(buttonPin) == g.HIGH:
-        warnLevel = 1
-        print("정상화")
     
     
     g.output(TRIGER,g.LOW)

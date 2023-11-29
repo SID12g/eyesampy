@@ -1,9 +1,9 @@
 import RPi.GPIO as g
 import time
 
-RIGHT_PWM = 21
+RIGHT_PWM = 12
 RIGHT_FORWARD = 19
-RIGHT_BACKWARD = 6
+RIGHT_BACKWARD = 26
 
 g.setmode(g.BCM)
 

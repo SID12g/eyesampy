@@ -12,7 +12,7 @@ cred = credentials.Certificate('./eyesam-e6e07-firebase-adminsdk-4dy60-3a6f2b905
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-buttonPin = 26
+buttonPin = 6
 TRIGER = 24
 ECHO = 23
 buzzer = 13

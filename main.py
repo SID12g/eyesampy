@@ -2,11 +2,21 @@ import RPi.GPIO as g
 import time
 import Adafruit_DHT as dht
 import spidev
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+# Firebase Admin SDK에서 다운로드한 서비스 계정 키(JSON 파일) 경로
+# Firestore 클라이언트 초기화
+cred = credentials.Certificate('./eyesam-e6e07-firebase-adminsdk-4dy60-3a6f2b9057.json')
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 buttonPin = 26
 TRIGER = 24
 ECHO = 23
 buzzer = 13
+soundPin = 7
 
 g.setwarnings(False)
 
@@ -20,6 +30,7 @@ g.setup(17, g.OUT) # 온도와 습도를 감지 온도 : tenprature, 습도 : hu
 g.setup(ECHO,g.IN) # 초음파 ECHO
 g.setup(TRIGER,g.OUT) # 초음파 TRIGER 거리 : dist1
 g.setup(buzzer, g.OUT) # 부저 등록
+g.setup(soundPin, g.IN) # 사운드 센서
 
 startTime = time.time()
 endTime = time.time()
@@ -101,7 +112,8 @@ while True:
     period = endTime - startTime
     dist1 = round(period * 1000000/58,2)
 
-
+    soundLevel = g.input(soundPin)
+        
     
 
     try:
@@ -129,5 +141,21 @@ while True:
     print("dist:", dist1)
     print("bright : ", brightness)
     print("warnLevel : ", warnLevel)
+    print("soundLevel", soundLevel)
+    time.sleep(10)
+   # 저장할 데이터
+    new_data = {
+        "temp":temperature,
+        "humi":humidity,
+        "dist":dist1,
+        "bright":brightness,
+        "sound":soundLevel
+    }
+    # 데이터를 저장할 컬렉션 및 문서 참조 생성
+    collection_ref = db.collection("info")
+    doc_id = "set1"
+    doc_ref = collection_ref.document(doc_id)
+    doc_ref.update(new_data)
+    print("확인하세요")
        
 g.cleanup()

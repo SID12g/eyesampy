@@ -17,6 +17,10 @@ TRIGER = 24
 ECHO = 23
 buzzer = 13
 soundPin = 7
+RIGHT_PWM = 12
+RIGHT_FORWARD = 19
+RIGHT_BACKWARD = 26
+
 
 g.setwarnings(False)
 
@@ -31,6 +35,13 @@ g.setup(ECHO,g.IN) # 초음파 ECHO
 g.setup(TRIGER,g.OUT) # 초음파 TRIGER 거리 : dist1
 g.setup(buzzer, g.OUT) # 부저 등록
 g.setup(soundPin, g.IN) # 사운드 센서
+g.setup(RIGHT_PWM,g.OUT)
+g.setup(RIGHT_FORWARD,g.OUT)
+g.setup(RIGHT_BACKWARD,g.OUT)
+
+RIGHT_MOTOR = g.PWM(RIGHT_PWM, 100)
+RIGHT_MOTOR.start(0)
+
 
 startTime = time.time()
 endTime = time.time()
@@ -51,6 +62,13 @@ def ReadVol(vol):
     adc = spi.xfer2([1, (0x08+vol) << 4, 0])
     data = ((adc[1]&0x03) << 8) + adc[2]
     return data
+
+
+def rightMotor(forward, backward, pwm):
+    g.output(RIGHT_FORWARD, forward)
+    g.output(RIGHT_BACKWARD, backward)
+    RIGHT_MOTOR.ChangeDutyCycle(pwm)
+    
 
 
 
@@ -84,7 +102,8 @@ while True:
         g.output(21, False)
         g.output(21, True)
         pwm.ChangeFrequency(261)
-        time.sleep(1)
+        rightMotor(1, 0, 70)
+        time.sleep(10) # 모터 시간 지정
     
         # 위험 상태 도달 시 부저로 알림
         pwm.ChangeDutyCycle(50)

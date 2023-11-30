@@ -46,9 +46,6 @@ RIGHT_MOTOR.start(0)
 startTime = time.time()
 endTime = time.time()
 
-# 부저 코드
-pwm = g.PWM(buzzer, 100)
-pwm.start(50)
 
 # 조도 센서 코드
 spi = spidev.SpiDev()
@@ -73,7 +70,9 @@ def rightMotor(forward, backward, pwm):
 
 
 while True:
-    
+    g.output(buzzer, False)
+     # 모터 시간 지정
+    rightMotor(0,0,0)
     brightness = ReadVol(0) # 밝기 정의
     # 코드 쓸 때 brightness < 100 이런 식으로 작성 if문 사용
     if g.input(buttonPin) == g.HIGH:
@@ -87,29 +86,25 @@ while True:
         g.output(20, False)
         g.output(21, False)
         g.output(16, True)
-        pwm.ChangeFrequency(1)
     elif warnLevel == 2:
         print('w2')
         g.output(16, False)
         g.output(20, False)
         g.output(21, False)
+        
         g.output(20, True)
-        pwm.ChangeFrequency(1)
     elif warnLevel == 3:
         print('w3')
         g.output(16, False)
         g.output(20, False)
         g.output(21, False)
         g.output(21, True)
-        pwm.ChangeFrequency(261)
-        rightMotor(1, 0, 70)
-        time.sleep(10) # 모터 시간 지정
-    
         # 위험 상태 도달 시 부저로 알림
-        pwm.ChangeDutyCycle(50)
-        pwm.ChangeFrequency(261) 
-        time.sleep(1.0)
-    
+        g.output(buzzer, True)
+        rightMotor(1, 0, 100)
+        time.sleep(8)
+        rightMotor(0,0,0)
+        g.output(buzzer, False)
     
     g.output(TRIGER,g.LOW)
     time.sleep(0.1)

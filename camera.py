@@ -40,6 +40,7 @@ last_blink_time = start_time
 # gpio 셋팅
 last_save = 0
 
+# 눈 감은 횟수 카운터 함수
 def counter(func):
     @wraps(func)
     def tmp(*args, **kwargs):
@@ -65,15 +66,16 @@ def counter(func):
             tmp.count = 0
         return func(*args, **kwargs)
     tmp.count = 0
+    # 눈 감은 횟수
     return tmp
 
+# 눈 감을경우 DROWSY 출력
 @counter
 def close():
     cv2.putText(frame, "DROWSY", (20, 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 4)
 
 def sound():
-    print("Driver is sleeping")
-    # 여기에 알람을 울리기 위한 코드 추가
+    print("plz watch out!")
 
 while True:
     ret, frame = cap.read()
@@ -82,7 +84,8 @@ while True:
     if not ret:
         print("비디오 프레임을 읽을 수 없습니다.")
         break
-
+    
+    # 아래부터 눈 감은 정도에 대한 계산 (shape_predictor 에서 데이터 가져옴)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     faces = hog_face_detector(gray)
@@ -119,6 +122,7 @@ while True:
         EAR = (left_ear + right_ear) / 2
         EAR = round(EAR, 2)
 
+        # EAR 값에 따라 눈 감은 정도 지정
         if EAR < 0.19:
             close()
             print(f'close count: {close.count}')
@@ -126,8 +130,10 @@ while True:
                 sound()
         print(EAR)
 
-    cv2.imshow("Are you Sleepy", frame)
+    # 프로그램명 지정
+    cv2.imshow("EYESAM_CAM", frame)
 
+    # ESC 입력시 종료
     key = cv2.waitKey(30)
     if key == 27:
         break

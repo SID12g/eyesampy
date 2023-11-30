@@ -5,10 +5,15 @@ import spidev
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from dotenv import load_dotenv
+import os 
+
+load_dotenv()
+MAIN_PATH = os.environ.get('MAIN_PATH')
 
 # Firebase Admin SDK에서 다운로드한 서비스 계정 키(JSON 파일) 경로
 # Firestore 클라이언트 초기화
-cred = credentials.Certificate('./eyesam-e6e07-firebase-adminsdk-4dy60-3a6f2b9057.json')
+cred = credentials.Certificate(MAIN_PATH)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
